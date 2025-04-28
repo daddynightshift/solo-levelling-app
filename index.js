@@ -1,11 +1,22 @@
 const app = document.getElementById("root");
 
-const goals = JSON.parse(localStorage.getItem("goals")) || [
+const savedGoals = JSON.parse(localStorage.getItem("goals")) || [
   { name: "Push-ups", target: 100, current: 0 },
   { name: "Sit-ups", target: 100, current: 0 },
   { name: "Steps", target: 10000, current: 0 }
 ];
 
+const lastDate = localStorage.getItem("lastDate");
+const today = new Date().toISOString().split("T")[0];
+
+if (lastDate !== today) {
+  // New day = reset all current progress
+  savedGoals.forEach(goal => goal.current = 0);
+  localStorage.setItem("lastDate", today);
+  localStorage.setItem("goals", JSON.stringify(savedGoals));
+}
+
+const goals = savedGoals
 function saveGoals() {
   localStorage.setItem("goals", JSON.stringify(goals));
 }
